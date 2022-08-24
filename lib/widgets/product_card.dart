@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:loguin_flutter/models/models.dart';
 
 class ProductCard extends StatelessWidget {
+  //ahi estan almacendaos los valores de la base de datos
+  final Products product;
+
+  const ProductCard({super.key, required this.product});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,19 +19,22 @@ class ProductCard extends StatelessWidget {
           //para que los elementos esten en la parte de abajo
           alignment: Alignment.bottomLeft,
           children: [
-            _BackgroundImage(),
-            _ProductDetails(),
+            _BackgroundImage(product.picture),
+            _ProductDetails(
+              title: product.name,
+              subtitle: product.id!,
+            ),
             Positioned(
-              child:  _PriceTag(),
+              child: _PriceTag(price: product.price,),
               top: 0,
               right: 0,
             ),
+            if(!product.available)
             Positioned(
-              child:  _NotAvailable(),
+              child: _NotAvailable(),
               top: 0,
               left: 0,
             )
-           
           ],
         ),
       ),
@@ -45,7 +53,6 @@ class ProductCard extends StatelessWidget {
 }
 
 class _NotAvailable extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -55,21 +62,25 @@ class _NotAvailable extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             'No disponible',
-            style: TextStyle(color: Colors.white, fontSize: 20),),
+            style: TextStyle(color: Colors.white, fontSize: 20),
           ),
+        ),
       ),
       width: 100,
       height: 60,
       decoration: BoxDecoration(
-        color: Colors.amber,
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(25), bottomRight: Radius.circular(25))
-      ),
-
+          color: Colors.amber,
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25), bottomRight: Radius.circular(25))),
     );
   }
 }
 
 class _PriceTag extends StatelessWidget {
+  final double price;
+
+  const _PriceTag({super.key, required this.price});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,24 +90,28 @@ class _PriceTag extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            '\$10333s.99',
-            style: TextStyle(color: Colors.white, fontSize: 20),),
+            '\$$price',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
         ),
       ),
-        width: 100,
-        height: 60,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
+      width: 100,
+      height: 60,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
           color: Colors.indigo,
-          borderRadius: BorderRadius.only(topRight: Radius.circular(25),
-          bottomLeft: Radius.circular(25)
-          )
-        ),
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(25), bottomLeft: Radius.circular(25))),
     );
   }
 }
 
 class _ProductDetails extends StatelessWidget {
+  final String title;
+  final String subtitle;
+
+  const _ProductDetails({super.key, required this.title, required this.subtitle});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -110,7 +125,7 @@ class _ProductDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Disco duro G',
+             title,
               style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
@@ -118,12 +133,12 @@ class _ProductDetails extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-              Text(
-              'Id del dico duro',
+            Text(
+              subtitle,
               style: TextStyle(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),
+                fontSize: 15,
+                color: Colors.white,
+              ),
             )
           ],
         ),
@@ -132,12 +147,15 @@ class _ProductDetails extends StatelessWidget {
   }
 
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
-    color: Colors.indigo,
-    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(25), topRight: Radius.circular(25))
-  );
+      color: Colors.indigo,
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25), topRight: Radius.circular(25)));
 }
 
 class _BackgroundImage extends StatelessWidget {
+  final String? url;
+
+  const _BackgroundImage(this.url);
   @override
   Widget build(BuildContext context) {
     //para poder redondear el container
@@ -147,9 +165,9 @@ class _BackgroundImage extends StatelessWidget {
         width: double.infinity,
         height: 400,
         child: FadeInImage(
-          image: NetworkImage('https://via.placeholder.com/400x300/green'),
-          placeholder: AssetImage('assets/jar-loading.gif'),
-            
+            image: NetworkImage(url!),
+            placeholder: AssetImage('assets/jar-loading.gif'),
+
             //para que la imagen quede en todo el container
             fit: BoxFit.cover),
       ),
