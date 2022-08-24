@@ -147,8 +147,9 @@ class _BackgroundImage extends StatelessWidget {
         width: double.infinity,
         height: 400,
         child: FadeInImage(
-            placeholder: AssetImage('assets/jar-loading.gif'),
-            image: NetworkImage('https://via.placeholder.com/400x300/f6f6f6'),
+          image: NetworkImage('https://via.placeholder.com/400x300/green'),
+          placeholder: AssetImage('assets/jar-loading.gif'),
+            
             //para que la imagen quede en todo el container
             fit: BoxFit.cover),
       ),
