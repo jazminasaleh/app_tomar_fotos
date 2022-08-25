@@ -5,6 +5,7 @@ import 'package:loguin_flutter/services/services.dart';
 import 'package:loguin_flutter/ui/input_decorations.dart';
 import 'package:loguin_flutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProductScreen extends StatelessWidget {
   @override
@@ -52,7 +53,19 @@ class _ProductsSceenBody extends StatelessWidget {
                     top: 60,
                     right: 20,
                     child: IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          final picker = new ImagePicker();
+                          final XFile? pickedFile = await picker.pickImage(
+                              source: ImageSource.camera, 
+                              imageQuality: 100
+                            );
+
+                          if (pickedFile == null) {
+                            print('no selecciono nada');
+                            return;
+                          }
+                          print('tenemos imagen ${pickedFile.path}');
+                        },
                         icon: Icon(
                           Icons.camera_alt_outlined,
                           size: 40,
