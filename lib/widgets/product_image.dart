@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
+//Mostrar la imagen en la pantalla product
 class ProductIamge extends StatelessWidget {
   final String? url;
 
@@ -16,6 +16,7 @@ class ProductIamge extends StatelessWidget {
         height: 450,
         child: Opacity(
           opacity: 0.8,
+          //para agregar bordes redondeados 
           child: ClipRRect(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(45), topRight: Radius.circular(45)),
@@ -24,7 +25,7 @@ class ProductIamge extends StatelessWidget {
       ),
     );
   }
-
+//decoracion de la imagen
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.only(

@@ -29,11 +29,13 @@ class _ProductsSceenBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final productForm = Provider.of<ProductFormProvider>(context);
     return Scaffold(
+      //cuando salga el teclado el card del formulario
       body: SingleChildScrollView(
         //que la persona toque o deliqze la pantalla y se quite el teclado
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
+            //para que los iconos quede encima de la imagen
             Stack(
               children: [
                 ProductIamge(
@@ -45,8 +47,8 @@ class _ProductsSceenBody extends StatelessWidget {
                     child: IconButton(
                         onPressed: () => Navigator.of(context).pop(),
                         icon: Icon(
-                          Icons.arrow_back_ios_new,
-                          size: 40,
+                          Icons.arrow_back_ios_new_rounded,
+                          size: 30,
                           color: Colors.white,
                         ))),
                 Positioned(
@@ -58,10 +60,8 @@ class _ProductsSceenBody extends StatelessWidget {
                           final XFile? pickedFile = await picker.pickImage(
                               source: ImageSource.camera, imageQuality: 100);
 
-                          if (pickedFile == null) {
-                            print('no selecciono nada');
-                            return;
-                          }
+                          if (pickedFile == null) return;
+                          
                           print('Tenemos imagen ${pickedFile.path}');
                           productService
                               .updateSelectedProductImage(pickedFile.path);
@@ -69,11 +69,12 @@ class _ProductsSceenBody extends StatelessWidget {
                         icon: Icon(
                           Icons.camera_alt_outlined,
                           size: 40,
-                          color: Colors.white,
+                          color: Colors.deepPurple,
                           
                         ),
-                        )),
-                        Positioned(
+                        )
+                      ),
+                  Positioned(
                     top: 60,
                     right: 65,
                     child: IconButton(
@@ -93,8 +94,10 @@ class _ProductsSceenBody extends StatelessWidget {
                         icon: Icon(
                           Icons.photo_size_select_actual_outlined,
                           size: 40,
-                          color: Colors.white,
-                        )))
+                          color: Colors.deepPurple,
+                        )
+                      )
+                    )
               ],
             ),
             _ProductFrom(),
@@ -104,7 +107,7 @@ class _ProductsSceenBody extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         child: productService.isSaving
         ? CircularProgressIndicator(color: Colors.white,)
@@ -123,6 +126,7 @@ class _ProductsSceenBody extends StatelessWidget {
   }
 }
 
+//la parte del formulario
 class _ProductFrom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -142,6 +146,7 @@ class _ProductFrom extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
+                //el cuadro de texto para escribi el nombre
                 TextFormField(
                   initialValue: product.name,
                   onChanged: (value) => product.name = value,
@@ -187,6 +192,7 @@ class _ProductFrom extends StatelessWidget {
     );
   }
 
+//la decoracion de formulario
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -197,5 +203,6 @@ class _ProductFrom extends StatelessWidget {
                 color: Colors.black.withOpacity(0.05),
                 offset: Offset(0, 5),
                 blurRadius: 5)
-          ]);
+          ]
+    );
 }
