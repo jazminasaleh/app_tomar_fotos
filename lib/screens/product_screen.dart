@@ -56,18 +56,42 @@ class _ProductsSceenBody extends StatelessWidget {
                         onPressed: () async {
                           final picker = new ImagePicker();
                           final XFile? pickedFile = await picker.pickImage(
-                              source: ImageSource.camera, 
-                              imageQuality: 100
-                            );
+                              source: ImageSource.camera, imageQuality: 100);
 
                           if (pickedFile == null) {
                             print('no selecciono nada');
                             return;
                           }
-                          print('tenemos imagen ${pickedFile.path}');
+                          print('Tenemos imagen ${pickedFile.path}');
+                          productService
+                              .updateSelectedProductImage(pickedFile.path);
                         },
                         icon: Icon(
                           Icons.camera_alt_outlined,
+                          size: 40,
+                          color: Colors.white,
+                          
+                        ),
+                        )),
+                        Positioned(
+                    top: 60,
+                    right: 65,
+                    child: IconButton(
+                        onPressed: () async {
+                          final picker = new ImagePicker();
+                          final XFile? pickedFile = await picker.pickImage(
+                              source: ImageSource.gallery, imageQuality: 100);
+
+                          if (pickedFile == null) {
+                            print('no selecciono nada');
+                            return;
+                          }
+                          print('Tenemos imagen ${pickedFile.path}');
+                          productService
+                              .updateSelectedProductImage(pickedFile.path);
+                        },
+                        icon: Icon(
+                          Icons.photo_size_select_actual_outlined,
                           size: 40,
                           color: Colors.white,
                         )))
@@ -82,10 +106,17 @@ class _ProductsSceenBody extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save),
-        onPressed: () {
+        child: productService.isSaving
+        ? CircularProgressIndicator(color: Colors.white,)
+        : Icon(Icons.save),
+        onPressed: productService.isSaving
+        ? null
+        :() async {
           if (!productForm.isValidForm()) return;
-          productService.saveOrcreateProduct(productForm.product);
+          final String? imageUrl = await productService.uploadImage();
+          print(imageUrl);
+          if ( imageUrl != null ) productForm.product.picture = imageUrl;
+          await productService.saveOrcreateProduct(productForm.product);
         },
       ),
     );
