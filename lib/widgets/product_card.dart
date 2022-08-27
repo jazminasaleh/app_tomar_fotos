@@ -140,7 +140,7 @@ class _ProductDetails extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Text(
-            subtitle,
+            'Ref $subtitle',
             style: TextStyle(
               fontSize: 15,
               color: Colors.white,
@@ -160,7 +160,7 @@ class _ProductDetails extends StatelessWidget {
       ));
 }
 
-//la imagen de fondo
+//la imagen de fondo de los crads
 class _BackgroundImage extends StatelessWidget {
   final String? url;
 
@@ -173,7 +173,7 @@ class _BackgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 400,
-        //se mira si hay imagen
+        //se mira si hay imagen, por si alguno no tiene imagen
         child: url == null
             ? Image(
                 image: AssetImage('assets/no-image.png'),
@@ -182,7 +182,6 @@ class _BackgroundImage extends StatelessWidget {
             : FadeInImage(
                 image: NetworkImage(url!),
                 placeholder: AssetImage('assets/jar-loading.gif'),
-
                 //para que la imagen quede en todo el container
                 fit: BoxFit.cover),
       ),

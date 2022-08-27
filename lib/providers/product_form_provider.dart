@@ -5,18 +5,17 @@ class ProductFormProvider extends ChangeNotifier {
   GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 
   Products product;
-  //constrcutor
+  //constrcutor y el producto que recibe es importante que sea una copia
+  //para que solo tenga un pordutco el seleccionado y no todos
   ProductFormProvider(this.product);
-//para ver si el producto se encunetra dispoisble
+//para ver si el producto se encunetra dispoisble o no
   updateAvailability(bool value) {
     print(value);
     this.product.available = value;
     notifyListeners();
   }
-
+//la informacion del porducto seleccionado
   bool isValidForm() {
-     print(product.name);
-     print(product.price);
     return formKey.currentState?.validate() ?? false;
   }
 }

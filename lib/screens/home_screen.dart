@@ -24,6 +24,7 @@ class HomeScreen extends StatelessWidget {
               //para cuando se le de a cualquier lado de la tarjea vaya a product card
               GestureDetector(
                   onTap: () {
+                    //aca manda el producto seleccionado en el home
                     productsSerice.selectedProduct =
                         productsSerice.products[index].copy();
                     Navigator.pushNamed(context, 'product');

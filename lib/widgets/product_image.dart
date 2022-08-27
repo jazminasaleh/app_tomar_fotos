@@ -14,6 +14,7 @@ class ProductIamge extends StatelessWidget {
         decoration: _buildBoxDecoration(),
         width: double.infinity,
         height: 450,
+        //colocar a la imagen una opacidad para que se vea la camara
         child: Opacity(
           opacity: 0.8,
           //para agregar bordes redondeados 
@@ -27,7 +28,7 @@ class ProductIamge extends StatelessWidget {
   }
 //decoracion de la imagen
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
-          color: Colors.black,
+          color: Color.fromARGB(255, 9, 9, 9),
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(45), topRight: Radius.circular(45)),
           boxShadow: [

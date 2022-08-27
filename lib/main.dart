@@ -4,13 +4,16 @@ import 'package:loguin_flutter/services/product_service.dart';
 import 'package:provider/provider.dart';
 
 void main() => runApp(AppState());
-
+//Estado de la app 
 class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_)=>ProductsService(),)
+        ChangeNotifierProvider(
+          //crea un instancia de productservice
+          create: (_)=>ProductsService(),
+        )
       ],
       child: MyApp(),
     );

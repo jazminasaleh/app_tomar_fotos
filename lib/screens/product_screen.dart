@@ -11,9 +11,12 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productService = Provider.of<ProductsService>(context);
+    //como esta es la unica pagian donde se necesita el produtco seleccioando
+    //por eso se coloca aca
     return ChangeNotifierProvider(
         create: (_) => ProductFormProvider(productService.selectedProduct),
-        child: _ProductsSceenBody(productService: productService));
+        child: _ProductsSceenBody(productService: productService)
+      );
   }
 }
 
@@ -24,6 +27,7 @@ class _ProductsSceenBody extends StatelessWidget {
   }) : super(key: key);
 
   final ProductsService productService;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +36,7 @@ class _ProductsSceenBody extends StatelessWidget {
       //cuando salga el teclado el card del formulario
       body: SingleChildScrollView(
         //que la persona toque o deliqze la pantalla y se quite el teclado
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        //keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
             //para que los iconos quede encima de la imagen
@@ -69,7 +73,7 @@ class _ProductsSceenBody extends StatelessWidget {
                         icon: Icon(
                           Icons.camera_alt_outlined,
                           size: 40,
-                          color: Colors.deepPurple,
+                          color: Colors.white,
                           
                         ),
                         )
@@ -88,13 +92,14 @@ class _ProductsSceenBody extends StatelessWidget {
                             return;
                           }
                           print('Tenemos imagen ${pickedFile.path}');
+                          
                           productService
                               .updateSelectedProductImage(pickedFile.path);
                         },
                         icon: Icon(
                           Icons.photo_size_select_actual_outlined,
                           size: 40,
-                          color: Colors.deepPurple,
+                          color: Colors.white,
                         )
                       )
                     )
@@ -151,7 +156,7 @@ class _ProductFrom extends StatelessWidget {
                   initialValue: product.name,
                   onChanged: (value) => product.name = value,
                   validator: (value) {
-                    if (value == null || value.length < 1)
+                    if (value == null || value.length < 2)
                       return 'el nombre es obligatorio';
                   },
                   decoration: InputDecorations.authInputDecoration(
