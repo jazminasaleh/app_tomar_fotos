@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+
 //Mostrar la imagen en la pantalla product
 class ProductIamge extends StatelessWidget {
   final String? url;
@@ -21,7 +21,8 @@ class ProductIamge extends StatelessWidget {
           child: ClipRRect(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(45), topRight: Radius.circular(45)),
-              child: getImage(url)),
+              child: getImage(url)
+            ),
         ),
       ),
     );
@@ -37,6 +38,9 @@ class ProductIamge extends StatelessWidget {
                 blurRadius: 10,
                 offset: Offset(0, 5))
           ]);
+  
+  //obtener la imagen tomada de galeria o por camara
+  //y mostrarla
   Widget getImage(String? picture) {
     if (picture == null)
       return Image(
