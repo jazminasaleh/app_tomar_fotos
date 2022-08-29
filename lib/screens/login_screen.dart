@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:loguin_flutter/providers/login_form_provider.dart';
 import 'package:loguin_flutter/services/services.dart';
@@ -42,15 +43,17 @@ class LoginScreen extends StatelessWidget {
         SizedBox(
           height: 50,
         ),
-       TextButton(onPressed: () => Navigator.pushReplacementNamed(context, 'register'), 
-       style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
-          shape:  MaterialStateProperty.all(StadiumBorder())
-       ),
-       child:  Text(
-          'Crear una nueva cuenta',
-          style: TextStyle(fontSize: 18, color: Colors.black87),
-        ),),
+        TextButton(
+          onPressed: () => Navigator.pushReplacementNamed(context, 'register'),
+          style: ButtonStyle(
+              overlayColor:
+                  MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
+              shape: MaterialStateProperty.all(StadiumBorder())),
+          child: Text(
+            'Crear una nueva cuenta',
+            style: TextStyle(fontSize: 18, color: Colors.black87),
+          ),
+        ),
         SizedBox(
           height: 80,
         )
@@ -99,7 +102,7 @@ class _LoginForm extends StatelessWidget {
                     hintText: '******',
                     labelText: 'Contraeña',
                     prefixIcon: Icons.lock_clock_outlined),
-                    //se alamacena en el login from provider la contraseña
+                //se alamacena en el login from provider la contraseña
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
                   if (value != null && value.length >= 6) return null;
@@ -126,17 +129,17 @@ class _LoginForm extends StatelessWidget {
                       ? null
                       : () async {
                           //quitar el teclado
-                         FocusScope.of(context).unfocus();
+                          FocusScope.of(context).unfocus();
                           final authService =
                               Provider.of<AuthService>(context, listen: false);
                           if (!loginForm.isValidForm()) return;
                           loginForm.isLoading = true;
-                          final String? errorMessege = await authService
-                              .login(loginForm.email, loginForm.password);
+                          final String? errorMessege = await authService.login(
+                              loginForm.email, loginForm.password);
                           if (errorMessege == null) {
                             Navigator.pushReplacementNamed(context, 'home');
                           } else {
-                            print(errorMessege);
+                            NotificacionesService.showSanckbar(errorMessege);
                             loginForm.isLoading = false;
                           }
                         })

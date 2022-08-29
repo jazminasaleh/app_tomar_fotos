@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:loguin_flutter/models/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:loguin_flutter/widgets/product_card.dart';
@@ -17,6 +18,7 @@ class ProductsService extends ChangeNotifier {
   final List<Products> products = [];
   //el porducto seleccionado en el home
   late Products selectedProduct;
+  final storage = new FlutterSecureStorage();
   //para almacenar l aimagen puede ser que no se seleccione ninguna imagen
   File? newPictureFile;
   bool isLoading = true;
@@ -33,7 +35,9 @@ class ProductsService extends ChangeNotifier {
     this.isLoading = true;
     notifyListeners();
     //el segundo parametro es la utlima parte del link de postamn
-    final url = Uri.https(_baseUrl, 'productos.json');
+    final url = Uri.https(_baseUrl, 'productos.json',{
+      'auth': await storage.read(key: 'token') ?? ''
+    });
     //Traer la infromacion de la base de datos
     final resp = await http.get(url);
     //convertir la respuesta en un mapa
@@ -71,13 +75,13 @@ class ProductsService extends ChangeNotifier {
 //actualizar informacion del producto
   Future<String> updateProduct(Products product) async {
     //actualizar infromacion en la base de datos
-<<<<<<< HEAD
-    final url = Uri.https(_baseUrl, 'products/${product.id}.json');
-=======
-    final url = Uri.https(_baseUrl, 'productos/${product.id}.json');
->>>>>>> 5f21d1a (Validacion login)
+
+    final url = Uri.https(_baseUrl, 'products/${product.id}.json', {
+      'auth': await storage.read(key: 'token') ?? ''
+    });
+
     //http.put: almacena en el url como un recurso actualizado
-    final resp = await http.put(url, body: product.toJson());
+    final resp = await http.put(url, body: product.toJson(), );
     final descodeData = resp.body;
     //se actualiza el lista de product0os
     for (var i = 0; i < products.length; i++) {
@@ -90,11 +94,11 @@ class ProductsService extends ChangeNotifier {
 
 //crera un nuevo producto
   Future<String> createProduct(Products product) async {
-<<<<<<< HEAD
-    final url = Uri.https(_baseUrl, 'products.json');
-=======
-    final url = Uri.https(_baseUrl, 'productos.json');
->>>>>>> 5f21d1a (Validacion login)
+
+    final url = Uri.https(_baseUrl, 'products.json',{
+      'auth': await storage.read(key: 'token') ?? ''
+    });
+
     //http.post: es para agregar el producto al url de la solicitud
     final resp = await http.post(url, body: product.toJson());
     final descodeData = json.decode(resp.body);
@@ -104,35 +108,22 @@ class ProductsService extends ChangeNotifier {
     return product.id!;
   }
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 5f21d1a (Validacion login)
 //cambiar la imagen del la lista de productos al tomar foto o seleccionar de la galeria
   void updateSelectedProductImage(String path) {
     this.selectedProduct.picture = path;
     this.newPictureFile = File.fromUri(Uri(path: path));
     notifyListeners();
   }
-<<<<<<< HEAD
-//colocar la imagne en clodinary 
-=======
 
-//colocar la imagne en clodinary
->>>>>>> 5f21d1a (Validacion login)
   Future<String?> uploadImage() async {
     if (this.newPictureFile == null) return null;
 
     this.isSaving = true;
     notifyListeners();
     //se toma el url de cloudinary colocando en postman
-<<<<<<< HEAD
+
     final url = Uri.parse('https://api.cloudinary.com/v1_1/dbzsnembj/image/upload?upload_preset=rxyl54nc');
-=======
-    final url = Uri.parse(
-        'https://api.cloudinary.com/v1_1/dbzsnembj/image/upload?upload_preset=rxyl54nc');
->>>>>>> 5f21d1a (Validacion login)
 
     final imageUploadRequest = http.MultipartRequest('POST', url);
 
@@ -144,10 +135,6 @@ class ProductsService extends ChangeNotifier {
     final resp = await http.Response.fromStream(streamResponse);
 
     if (resp.statusCode != 200 && resp.statusCode != 201) return null;
-<<<<<<< HEAD
-    
-=======
->>>>>>> 5f21d1a (Validacion login)
 
     this.newPictureFile = null;
 

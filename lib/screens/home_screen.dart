@@ -11,11 +11,20 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //Cuano se llama se trae la base de datos
     final productsSerice = Provider.of<ProductsService>(context);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     if (productsSerice.isLoading) return LoadingScreen();
     return Scaffold(
       appBar: AppBar(
-        title: Text('Productos',),
+        title: Text(
+          '             Productos',
+        ),
+        leading: IconButton(
+            onPressed: () async {
+              await authService.logout();
+              Navigator.pushReplacementNamed(context, 'login');
+            },
+            icon: Icon(Icons.login_outlined)),
       ),
       //que la lista se vaya construyendo
       body: ListView.builder(
@@ -31,18 +40,12 @@ class HomeScreen extends StatelessWidget {
                   },
                   child: ProductCard(
                     product: productsSerice.products[index],
-                  )
-                )
-              ),
+                  ))),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           //para que se vea como si se huniera seleccionado un poridtco pero no tiene nada
           productsSerice.selectedProduct =
-              new Products(
-                available: true, 
-                name: '', 
-                price: 0
-              );
+              new Products(available: true, name: '', price: 0);
           Navigator.pushNamed(context, 'product');
         },
         child: Icon(Icons.add),

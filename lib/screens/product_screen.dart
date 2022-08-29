@@ -131,22 +131,8 @@ class _ProductsSceenBody extends StatelessWidget {
         },
         )
       ),
-      Positioned(
-        left: 20,
-        bottom: 10,
-        child: FloatingActionButton(
-        heroTag: "btn2",
-        child: productService.isSaving
-        ? CircularProgressIndicator(color: Colors.white,)
-        : Icon(Icons.delete_forever),
-        onPressed: productService.isSaving
-        ? null
-        :() async {
-          if (!productForm.isValidForm()) return;
-          
-        },
-      ),
-      )
+     
+      
     ],  
   ),
       
