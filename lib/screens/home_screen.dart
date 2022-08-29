@@ -36,6 +36,7 @@ class HomeScreen extends StatelessWidget {
               ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          //para que se vea como si se huniera seleccionado un poridtco pero no tiene nada
           productsSerice.selectedProduct =
               new Products(
                 available: true, 

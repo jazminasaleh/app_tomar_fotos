@@ -60,13 +60,12 @@ class _ProductsSceenBody extends StatelessWidget {
                     right: 20,
                     child: IconButton(
                         onPressed: () async {
+                          //poder tomar una foto desde camra
                           final picker = new ImagePicker();
                           final XFile? pickedFile = await picker.pickImage(
                               source: ImageSource.camera, imageQuality: 100);
 
                           if (pickedFile == null) return;
-                          
-                          print('Tenemos imagen ${pickedFile.path}');
                           productService
                               .updateSelectedProductImage(pickedFile.path);
                         },
@@ -83,16 +82,13 @@ class _ProductsSceenBody extends StatelessWidget {
                     right: 65,
                     child: IconButton(
                         onPressed: () async {
+                          //el poder seleccionar una imagen desde galeria
                           final picker = new ImagePicker();
                           final XFile? pickedFile = await picker.pickImage(
                               source: ImageSource.gallery, imageQuality: 100);
 
-                          if (pickedFile == null) {
-                            print('no selecciono nada');
-                            return;
-                          }
-                          print('Tenemos imagen ${pickedFile.path}');
-                          
+                          if (pickedFile == null) return;
+                          //se menada el path de la imagen tomada de galeria
                           productService
                               .updateSelectedProductImage(pickedFile.path);
                         },
@@ -112,21 +108,49 @@ class _ProductsSceenBody extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        child: productService.isSaving
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned(
+            right: 20,
+            bottom: 10,
+            child: FloatingActionButton(
+            heroTag: "btn1",
+            child: productService.isSaving
         ? CircularProgressIndicator(color: Colors.white,)
         : Icon(Icons.save),
         onPressed: productService.isSaving
         ? null
         :() async {
           if (!productForm.isValidForm()) return;
+          //Se coloca la imagne que se encuntra en cloudinary en la base de datos firbase
           final String? imageUrl = await productService.uploadImage();
-          print(imageUrl);
           if ( imageUrl != null ) productForm.product.picture = imageUrl;
           await productService.saveOrcreateProduct(productForm.product);
         },
+        )
       ),
+      Positioned(
+        left: 20,
+        bottom: 10,
+        child: FloatingActionButton(
+        heroTag: "btn2",
+        child: productService.isSaving
+        ? CircularProgressIndicator(color: Colors.white,)
+        : Icon(Icons.delete_forever),
+        onPressed: productService.isSaving
+        ? null
+        :() async {
+          if (!productForm.isValidForm()) return;
+          
+        },
+      ),
+      )
+    ],  
+  ),
+      
+    
     );
   }
 }
@@ -156,8 +180,7 @@ class _ProductFrom extends StatelessWidget {
                   initialValue: product.name,
                   onChanged: (value) => product.name = value,
                   validator: (value) {
-                    if (value == null || value.length < 2)
-                      return 'el nombre es obligatorio';
+                    if (value == null || value.length < 2) return 'el nombre es obligatorio';
                   },
                   decoration: InputDecorations.authInputDecoration(
                       hintText: 'Nombre del producto', labelText: 'Nombre:'),

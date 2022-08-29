@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:loguin_flutter/models/models.dart';
 import 'package:http/http.dart' as http;
 import 'package:loguin_flutter/widgets/product_card.dart';
+
 
 //se trae la informacion de la base de datos
 //y esa infrmoarcion es almacenada en la lista products
@@ -15,9 +17,12 @@ class ProductsService extends ChangeNotifier {
   final List<Products> products = [];
   //el porducto seleccionado en el home
   late Products selectedProduct;
+  //para almacenar l aimagen puede ser que no se seleccione ninguna imagen
   File? newPictureFile;
   bool isLoading = true;
   bool isSaving = false;
+  bool isDelet = false;
+   
 //constructor
 //Siempre que se llame a esta clase que cargue los productos
   ProductsService() {
@@ -28,7 +33,7 @@ class ProductsService extends ChangeNotifier {
     this.isLoading = true;
     notifyListeners();
     //el segundo parametro es la utlima parte del link de postamn
-    final url = Uri.https(_baseUrl, 'products.json');
+    final url = Uri.https(_baseUrl, 'productos.json');
     //Traer la infromacion de la base de datos
     final resp = await http.get(url);
     //convertir la respuesta en un mapa
@@ -41,9 +46,9 @@ class ProductsService extends ChangeNotifier {
       this.products.add(tempProduct);
     });
 
-      this.isLoading = false;
-      notifyListeners();
-      return this.products;
+    this.isLoading = false;
+    notifyListeners();
+    return this.products;
   }
 
 //crea o actualiza el producto
@@ -65,10 +70,12 @@ class ProductsService extends ChangeNotifier {
 
 //actualizar informacion del producto
   Future<String> updateProduct(Products product) async {
-    final url = Uri.https(_baseUrl, 'products/${product.id}.json');
+    //actualizar infromacion en la base de datos
+    final url = Uri.https(_baseUrl, 'productos/${product.id}.json');
+    //http.put: almacena en el url como un recurso actualizado
     final resp = await http.put(url, body: product.toJson());
     final descodeData = resp.body;
-    print(descodeData);
+    //se actualiza el lista de product0os
     for (var i = 0; i < products.length; i++) {
       if (products[i].id == product.id) {
         this.products[i] = product;
@@ -79,7 +86,8 @@ class ProductsService extends ChangeNotifier {
 
 //crera un nuevo producto
   Future<String> createProduct(Products product) async {
-    final url = Uri.https(_baseUrl, 'products.json');
+    final url = Uri.https(_baseUrl, 'productos.json');
+    //http.post: es para agregar el producto al url de la solicitud
     final resp = await http.post(url, body: product.toJson());
     final descodeData = json.decode(resp.body);
     product.id = descodeData['name'];
@@ -88,19 +96,22 @@ class ProductsService extends ChangeNotifier {
     return product.id!;
   }
 
+
+
+//cambiar la imagen del la lista de productos al tomar foto o seleccionar de la galeria
   void updateSelectedProductImage(String path) {
     this.selectedProduct.picture = path;
     this.newPictureFile = File.fromUri(Uri(path: path));
-
     notifyListeners();
   }
 
+//colocar la imagne en clodinary
   Future<String?> uploadImage() async {
     if (this.newPictureFile == null) return null;
 
     this.isSaving = true;
     notifyListeners();
-
+    //se toma el url de cloudinary colocando en postman
     final url = Uri.parse(
         'https://api.cloudinary.com/v1_1/dbzsnembj/image/upload?upload_preset=rxyl54nc');
 
@@ -114,15 +125,12 @@ class ProductsService extends ChangeNotifier {
     final streamResponse = await imageUploadRequest.send();
     final resp = await http.Response.fromStream(streamResponse);
 
-    if (resp.statusCode != 200 && resp.statusCode != 201) {
-      print('algo salio mal');
-      print(resp.body);
-      return null;
-    }
+    if (resp.statusCode != 200 && resp.statusCode != 201) return null;
 
     this.newPictureFile = null;
 
     final decodedData = json.decode(resp.body);
     return decodedData['secure_url'];
   }
+
 }
