@@ -6,9 +6,7 @@ import 'package:loguin_flutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 //*Ubicacion de la tarjeta del login y su trajeta
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
+class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +24,7 @@ class LoginScreen extends StatelessWidget {
               height: 10,
             ),
             Text(
-              'Login',
+              'Crear cuenta',
               style: Theme.of(context).textTheme.headline4,
             ),
             SizedBox(
@@ -42,15 +40,17 @@ class LoginScreen extends StatelessWidget {
         SizedBox(
           height: 50,
         ),
-       TextButton(onPressed: () => Navigator.pushReplacementNamed(context, 'register'), 
-       style: ButtonStyle(
-          overlayColor: MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
-          shape:  MaterialStateProperty.all(StadiumBorder())
-       ),
-       child:  Text(
-          'Crear una nueva cuenta',
-          style: TextStyle(fontSize: 18, color: Colors.black87),
-        ),),
+        TextButton(
+          onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
+          style: ButtonStyle(
+              overlayColor:
+                  MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
+              shape: MaterialStateProperty.all(StadiumBorder())),
+          child: Text(
+            'Ya tienes una cuenta?',
+            style: TextStyle(fontSize: 18, color: Colors.black87),
+          ),
+        ),
         SizedBox(
           height: 80,
         )
@@ -99,7 +99,7 @@ class _LoginForm extends StatelessWidget {
                     hintText: '******',
                     labelText: 'Contraeña',
                     prefixIcon: Icons.lock_clock_outlined),
-                    //se alamacena en el login from provider la contraseña
+                //se alamacena en el login from provider la contraseña
                 onChanged: (value) => loginForm.password = value,
                 validator: (value) {
                   if (value != null && value.length >= 6) return null;
@@ -126,20 +126,22 @@ class _LoginForm extends StatelessWidget {
                       ? null
                       : () async {
                           //quitar el teclado
-                         FocusScope.of(context).unfocus();
+                          FocusScope.of(context).unfocus();
                           final authService =
                               Provider.of<AuthService>(context, listen: false);
                           if (!loginForm.isValidForm()) return;
                           loginForm.isLoading = true;
                           final String? errorMessege = await authService
-                              .login(loginForm.email, loginForm.password);
+                              .createUser(loginForm.email, loginForm.password);
                           if (errorMessege == null) {
                             Navigator.pushReplacementNamed(context, 'home');
                           } else {
                             print(errorMessege);
                             loginForm.isLoading = false;
                           }
-                        })
+                          
+                        }
+                        )
             ],
           )),
     );

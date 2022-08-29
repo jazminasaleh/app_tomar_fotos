@@ -108,9 +108,16 @@ class _ProductsSceenBody extends StatelessWidget {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        child: productService.isSaving
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Stack(
+        fit: StackFit.expand,
+        children: [
+          Positioned(
+            right: 20,
+            bottom: 10,
+            child: FloatingActionButton(
+            heroTag: "btn1",
+            child: productService.isSaving
         ? CircularProgressIndicator(color: Colors.white,)
         : Icon(Icons.save),
         onPressed: productService.isSaving
@@ -122,7 +129,28 @@ class _ProductsSceenBody extends StatelessWidget {
           if ( imageUrl != null ) productForm.product.picture = imageUrl;
           await productService.saveOrcreateProduct(productForm.product);
         },
+        )
       ),
+      Positioned(
+        left: 20,
+        bottom: 10,
+        child: FloatingActionButton(
+        heroTag: "btn2",
+        child: productService.isSaving
+        ? CircularProgressIndicator(color: Colors.white,)
+        : Icon(Icons.delete_forever),
+        onPressed: productService.isSaving
+        ? null
+        :() async {
+          if (!productForm.isValidForm()) return;
+          
+        },
+      ),
+      )
+    ],  
+  ),
+      
+    
     );
   }
 }
