@@ -5,7 +5,7 @@ import 'package:loguin_flutter/ui/input_decorations.dart';
 import 'package:loguin_flutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-//*Ubicacion de la tarjeta del login y su trajeta
+//*Pagina de resgistros
 class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class RegisterScreen extends StatelessWidget {
                   MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
               shape: MaterialStateProperty.all(StadiumBorder())),
           child: Text(
-            'Ya tienes una cuenta?',
+            '¿Ya tienes una cuenta?',
             style: TextStyle(fontSize: 18, color: Colors.black87),
           ),
         ),
@@ -127,21 +127,25 @@ class _LoginForm extends StatelessWidget {
                       : () async {
                           //quitar el teclado
                           FocusScope.of(context).unfocus();
+                          //provider authservice
                           final authService =
                               Provider.of<AuthService>(context, listen: false);
+
                           if (!loginForm.isValidForm()) return;
                           loginForm.isLoading = true;
+                          //el create usuario regresa:
+                          // el idToekn si es valido el correo, osea no existe en la app
+                          //y regresa error si no es valido el correo
                           final String? errorMessege = await authService
                               .createUser(loginForm.email, loginForm.password);
+                          //si el error es null pasa a la sieguinete pantalla
                           if (errorMessege == null) {
                             Navigator.pushReplacementNamed(context, 'home');
                           } else {
-                            print(errorMessege);
+                             NotificacionesService.showSanckbar('CORREO YA ESTA RESGITRADO',  backgroundColor: Colors.indigo,  duration: const Duration(milliseconds: 1500),);
                             loginForm.isLoading = false;
                           }
-                          
-                        }
-                        )
+                        })
             ],
           )),
     );

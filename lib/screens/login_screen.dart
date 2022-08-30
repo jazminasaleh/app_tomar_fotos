@@ -139,7 +139,16 @@ class _LoginForm extends StatelessWidget {
                           if (errorMessege == null) {
                             Navigator.pushReplacementNamed(context, 'home');
                           } else {
-                            NotificacionesService.showSanckbar(errorMessege);
+                            if(errorMessege == 'INVALID_PASSWORD') {
+                              //caja de alerta
+                              NotificacionesService.showSanckbar('CONTRASEÑA INCORRECTA',  backgroundColor: Colors.indigo,  duration: const Duration(milliseconds: 1500),);
+                              
+                            } else {
+                              //caja  de alerta
+                               NotificacionesService.showSanckbar('CORREO INCORRECTO',  backgroundColor: Colors.indigo,  duration: Duration(seconds: 5),
+                               );
+                            }
+                           
                             loginForm.isLoading = false;
                           }
                         })

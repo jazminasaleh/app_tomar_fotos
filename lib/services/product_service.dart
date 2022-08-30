@@ -18,6 +18,7 @@ class ProductsService extends ChangeNotifier {
   final List<Products> products = [];
   //el porducto seleccionado en el home
   late Products selectedProduct;
+  //almacenamiento de infromacion 
   final storage = new FlutterSecureStorage();
   //para almacenar l aimagen puede ser que no se seleccione ninguna imagen
   File? newPictureFile;

@@ -5,7 +5,7 @@ import 'package:loguin_flutter/services/services.dart';
 import 'package:loguin_flutter/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-//La pantalla  que muestra los prodyctos
+//La pantalla  que muestra los productos
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
